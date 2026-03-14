@@ -8,32 +8,24 @@ const Write_tab = (user) => {
   const [ambience, setAmbience] = useState("forest");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
- 
+
   const submitJournal = async () => {
     if (!text.trim()) return console.log("Write something first!");
-   
+
     setLoading(true);
-    
+
     try {
-  if (!user || !user.userId){
-    toast.error("Login First")
-    setLoading(false);
-    return;
-  }   
-     const userId=user?.userId.id;
-     console.log(userId,"mm");
-     
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/journal`, {
+      if (!user || !user.userId) {
+        toast.error("Login First");
+        setLoading(false);
+        return;
+      }
+      const userId = user?.userId.id;
+
+      const res = await fetch(`/api/journal`, {
         method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          text,
-          ambience,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, text, ambience }),
       });
 
       const data = await res.json();
@@ -94,7 +86,7 @@ const Write_tab = (user) => {
 
       <button
         onClick={submitJournal}
-        disabled={loading }
+        disabled={loading}
         className={`px-7 py-3 rounded-lg text-sm font-semibold text-white transition-colors ${loading ? "bg-gray-700 cursor-not-allowed" : "bg-emerald-700 hover:bg-emerald-600 cursor-pointer"}`}
       >
         {loading ? "Saving & Analyzing..." : "💾 Save Entry"}

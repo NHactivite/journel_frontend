@@ -10,11 +10,7 @@ const TotalEntries = (user) => {
   try {
     if (!user || !user.userId) return;
     const userId=user?.userId.id;
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER}/api/journal/${userId}`,{
-          credentials: "include",
-      }
-    );
+    const res = await fetch(`/api/journal/${userId}`)
 
     const data = await res.json();
 

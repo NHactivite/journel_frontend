@@ -8,7 +8,7 @@ const Insight = (user) => {
     try {
       if (!user || !user.userId) return;
       const userId=user?.userId.id;
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/journal/insights/${userId}`,{  credentials: "include",});
+     const res = await fetch(`/api/journal/insights/${userId}`) 
       if (!res.ok) {
         setInsights(null);
         return;
