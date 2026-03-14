@@ -1,38 +1,44 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import Loading from "./Loading";
 const TotalEntries = (user) => {
   const [refresh, setRefresh] = useState(false);
   const [entries, setEntries] = useState([]);
+  const [loading, setLoading]   = useState(true);
   const ambienceIcons = { forest: "🌲", ocean: "🌊", mountain: "⛰️" };
 
 
-  const fetchEntries = async () => {
-  try {
-    if (!user || !user.userId) return;
-    const userId=user?.userId.id;
-    const res = await fetch(`/api/journal/${userId}`)
-
-    const data = await res.json();
-
-    if (Array.isArray(data)) {
-      setEntries(data);
-    } else if (Array.isArray(data.entries)) {
-      setEntries(data.entries);
-    } else {
-      setEntries([]);
+ const fetchEntries = async () => {
+    try {
+      if (!user || !user.userId) return;
+      const userId = user?.userId.id;
+ 
+      setLoading(true);                              
+ 
+      const res  = await fetch(`/api/journal/${userId}`);
+      const data = await res.json();
+ 
+      if (Array.isArray(data)) {
+        setEntries(data);
+      } else if (Array.isArray(data.entries)) {
+        setEntries(data.entries);
+      } else {
+        setEntries([]);
+      }
+    } catch (error) {
+      console.log("Failed to fetch entries", error);
+    } finally {
+      setLoading(false);                          
     }
-
-  } catch (error) {
-    console.log("Failed to fetch entries", error);
-  }
-};
+  };
 
   useEffect(() => {
     fetchEntries();
   }, [refresh]);
 
+  
   return (
-    <div>
+    loading?<Loading/>:(<div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold ">
           Previous Entries
@@ -109,7 +115,9 @@ const TotalEntries = (user) => {
           ))}
         </div>
       )}
-    </div>
+    </div>)
+      
+    
   );
 };
 

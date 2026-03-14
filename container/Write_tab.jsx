@@ -28,9 +28,9 @@ const Write_tab = (user) => {
         body: JSON.stringify({ userId, text, ambience }),
       });
 
-      const data = await res.json();
+      await res.json();
 
-      console.log("Saved! Emotion:", data.emotion || "unknown");
+      toast.success("Saved! Emotion")
 
       setText("");
     } catch (error) {

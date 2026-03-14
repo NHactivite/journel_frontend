@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
+import Loading from "./Loading";
 
 const Insight = (user) => {
   const [refresh, setRefresh] = useState(false);
   const [insights, setInsights] = useState(null);
+  const [loading,setLoading]=useState(true)
   const ambienceIcons = { forest: "🌲", ocean: "🌊", mountain: "⛰️" };
   const fetchInsights = async () => {
     try {
       if (!user || !user.userId) return;
       const userId=user?.userId.id;
+      setLoading(true)
      const res = await fetch(`/api/journal/insights/${userId}`) 
       if (!res.ok) {
         setInsights(null);
@@ -17,6 +20,8 @@ const Insight = (user) => {
       setInsights(data);
     } catch {
       showToast("Failed to fetch insights", "error");
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -25,7 +30,7 @@ const Insight = (user) => {
   }, [refresh]);
 
   return (
-    <div>
+   loading?<Loading/>:( <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold ">Insights</h2>
         <button
@@ -106,7 +111,7 @@ const Insight = (user) => {
 
         </>
       )}
-    </div>
+    </div>)
   );
 };
 
